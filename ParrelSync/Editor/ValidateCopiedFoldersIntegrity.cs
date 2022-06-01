@@ -42,6 +42,13 @@ namespace ParrelSync
             }
         }
 
+        public static void UpdateFolder(string targetRoot, string originalRoot, string folderName)
+        {
+            var targetFolderPath = Path.Combine(targetRoot, folderName);
+            var originalFolderPath = Path.Combine(originalRoot, folderName);
+            FileUtil.ReplaceDirectory(originalFolderPath, targetFolderPath);
+        }
+
         static string CreateMd5ForFolder(string path)
         {
             // assuming you want to include nested folders
