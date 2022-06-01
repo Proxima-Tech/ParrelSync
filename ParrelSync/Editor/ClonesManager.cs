@@ -100,20 +100,17 @@ namespace ParrelSync
 
             ClonesManager.CreateProjectFolder(cloneProject);
 
-            //Copy Folders           
+            //Copy Folders
             Debug.Log("Library copy: " + cloneProject.libraryPath);
             ClonesManager.CopyDirectoryWithProgressBar(sourceProject.libraryPath, cloneProject.libraryPath,
                 "Cloning Project Library '" + sourceProject.name + "'. ");
-            Debug.Log("Packages copy: " + cloneProject.libraryPath);
-            ClonesManager.CopyDirectoryWithProgressBar(sourceProject.packagesPath, cloneProject.packagesPath,
-              "Cloning Project Packages '" + sourceProject.name + "'. ");
-
 
             //Link Folders
             ClonesManager.LinkFolders(sourceProject.assetPath, cloneProject.assetPath);
             ClonesManager.LinkFolders(sourceProject.projectSettingsPath, cloneProject.projectSettingsPath);
             ClonesManager.LinkFolders(sourceProject.autoBuildPath, cloneProject.autoBuildPath);
             ClonesManager.LinkFolders(sourceProject.localPackages, cloneProject.localPackages);
+            ClonesManager.LinkFolders(sourceProject.packagesPath, cloneProject.packagesPath);
 
             ClonesManager.RegisterClone(cloneProject);
 
@@ -157,7 +154,7 @@ namespace ParrelSync
                 return;
             }
 
-            //Validate (and update if needed) the "Packages" folder before opening clone project to ensure the clone project will have the 
+            //Validate (and update if needed) the "Packages" folder before opening clone project to ensure the clone project will have the
             //same "compiling environment" as the original project
             ValidateCopiedFoldersIntegrity.ValidateFolder(projectPath, GetOriginalProjectPath(), "Packages");
 
@@ -234,7 +231,7 @@ namespace ParrelSync
                 case (RuntimePlatform.WindowsEditor):
                     Debug.Log("Attempting to delete folder \"" + cloneProjectPath + "\"");
 
-                    //The argument file will be deleted first at the beginning of the project deletion process 
+                    //The argument file will be deleted first at the beginning of the project deletion process
                     //to prevent any further reading and writing to it(There's a File.Exist() check at the (file)editor windows.)
                     //If there's any file in the directory being write/read during the deletion process, the directory can't be fully removed.
                     identifierFile = Path.Combine(cloneProjectPath, ClonesManager.ArgumentFileName);
@@ -247,7 +244,7 @@ namespace ParrelSync
                 case (RuntimePlatform.OSXEditor):
                     Debug.Log("Attempting to delete folder \"" + cloneProjectPath + "\"");
 
-                    //The argument file will be deleted first at the beginning of the project deletion process 
+                    //The argument file will be deleted first at the beginning of the project deletion process
                     //to prevent any further reading and writing to it(There's a File.Exist() check at the (file)editor windows.)
                     //If there's any file in the directory being write/read during the deletion process, the directory can't be fully removed.
                     identifierFile = Path.Combine(cloneProjectPath, ClonesManager.ArgumentFileName);
@@ -333,7 +330,7 @@ namespace ParrelSync
         {
             sourcePath = sourcePath.Replace(" ", "\\ ");
             destinationPath = destinationPath.Replace(" ", "\\ ");
-            var command = string.Format("ln -s {0} {1}", sourcePath, destinationPath);           
+            var command = string.Format("ln -s {0} {1}", sourcePath, destinationPath);
 
             Debug.Log("Linux Symlink " + command);
 
@@ -352,7 +349,7 @@ namespace ParrelSync
             ClonesManager.StartHiddenConsoleProcess("cmd.exe", cmd);
         }
 
-        //TODO(?) avoid terminal calls and use proper api stuff. See below for windows! 
+        //TODO(?) avoid terminal calls and use proper api stuff. See below for windows!
         ////https://docs.microsoft.com/en-us/windows/desktop/api/ioapiset/nf-ioapiset-deviceiocontrol
         //[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         //private static extern bool DeviceIoControl(System.IntPtr hDevice, uint dwIoControlCode,
@@ -555,12 +552,6 @@ namespace ParrelSync
             /// Copy all files from the source.
             foreach (FileInfo file in source.GetFiles())
             {
-                // Ensure file exists before continuing.
-                if (!file.Exists)
-                {
-                    continue;
-                }
-
                 try
                 {
                     file.CopyTo(Path.Combine(destination.ToString(), file.Name), true);
@@ -606,7 +597,7 @@ namespace ParrelSync
                 "Scanning '" + directory.FullName + "'...", 0f);
 
             /// Calculate size of all files in directory.
-            long filesSize = directory.GetFiles().Sum((FileInfo file) => file.Exists ? file.Length : 0);
+            long filesSize = directory.GetFiles().Sum((FileInfo file) => file.Length);
 
             /// Calculate size of all nested directories.
             long directoriesSize = 0;
