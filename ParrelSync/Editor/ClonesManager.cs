@@ -156,7 +156,7 @@ namespace ParrelSync
 
             //Validate (and update if needed) the "Packages" folder before opening clone project to ensure the clone project will have the
             //same "compiling environment" as the original project
-            ValidateCopiedFoldersIntegrity.UpdateFolder(projectPath, GetOriginalProjectPath(), "Packages");
+            // ValidateCopiedFoldersIntegrity.UpdateFolder(projectPath, GetOriginalProjectPath(), "Packages");
 
             string fileName = GetApplicationPath();
             string args = "-projectPath \"" + projectPath + "\"";

@@ -23,7 +23,7 @@ namespace ParrelSync
                 SessionState.SetBool(SessionStateKey, true);
                 if (!ClonesManager.IsClone()) { return; }
 
-                ValidateFolder(ClonesManager.GetCurrentProjectPath(), ClonesManager.GetOriginalProjectPath(), "Packages");
+                // ValidateFolder(ClonesManager.GetCurrentProjectPath(), ClonesManager.GetOriginalProjectPath(), "Packages");
             }
         }
 
